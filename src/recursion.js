@@ -7,31 +7,95 @@
 // Example: 5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5); // 120
 var factorial = function(n) {
+  if (n < 0) {
+    return null;
+  }
+  if (n === 0) {
+    return 1;
+  }
+  return n * factorial(n - 1);
 };
+
+// console.log(factorial(5))2; // 120
 
 // 2. Compute the sum of an array of integers.
 // sum([1,2,3,4,5,6]); // 21
-var sum = function(array) {
+var sum = function(array, output = 0) {
+  if (!array.length) {
+    return 0;
+  }
+  return array[0] + sum(array.slice(1));
 };
 
 // 3. Sum all numbers in an array containing nested arrays.
 // arraySum([1,[2,3],[[4]],5]); // 15
-var arraySum = function(array) {
+var arraySum = function(array, result = 0) {
+  // could include let result = 0; here
+  // because the function is called again within it,
+  // instead of looping the whole thing back through the function
+  for (let el of array) {
+    if(Array.isArray(el)) {
+      result += arraySum(el);
+    } else {
+      result += el;
+    }
+  }
+  // if (!array.length) {
+  //   return 0;
+  // }
+  // for (let i = 0; i < array.length; i++) {
+  //   if (!Array.isArray(array[i])) {
+  //     return array[i] + arraySum(array.slice(1));
+  //   } else {
+  //     arraySum(array[i]);
+  //   }
+  // }
+  return result;
 };
 
 // 4. Check if a number is even.
 var isEven = function(n) {
+  n = Math.abs(n);
+  if (n === 0) {
+    return true;
+  }
+  if (n === 1) {
+    return false;
+  }
+  return isEven(n - 2);
 };
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
+  if (n === 0) {
+    return 0;
+  }
+  if (n >= 1) {
+    return n - 1 + sumBelow(n - 1);
+  }
+  if (n <= -1) {
+    return n + 1 + sumBelow(n + 1);
+  }
 };
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
+  var output = [];
+  if (x < y) {
+    if (x < y - 1) {
+      output.push(++x);
+      output = output.concat(range(x, y));  
+    }
+  } else if (x > y) {
+    if (x > y + 1) {
+      output.push(--x);
+      output = output.concat(range(x, y));  
+    }
+  }
+  return output;
 };
 
 // 7. Compute the exponent of a number.
@@ -40,6 +104,20 @@ var range = function(x, y) {
 // exponent(4,3); // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
+  if (exp === 0) {
+    return 1;
+  }
+  if (exp < 0) {
+    exp *= -1;
+    base = 1 / base;
+  }
+  if (exp > 1) {
+    --exp;
+    return base * exponent(base, exp);
+  }
+  if (exp === 1) {
+    return base;
+  }
 };
 
 // 8. Determine if a number is a power of two.
@@ -47,6 +125,13 @@ var exponent = function(base, exp) {
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
+  if (n === 1) {
+    return true;
+  }
+  if (n > 1) {
+  return (n % 2 === 0 && powerOfTwo(n / 2));
+  }
+  return false;
 };
 
 // 9. Write a function that reverses a string.
@@ -236,8 +321,53 @@ var tagCount = function(tag, node) {
 // var array = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
 // binarySearch(array, 5) // 5
 // https://www.khanacademy.org/computing/computer-science/algorithms/binary-search/a/binary-search
-var binarySearch = function(array, target, min, max) {
-};
+// var binarySearch = function(array, target, min, max) {
+//   let midPoint = Math.floor(((stop-start)/2) + start)
+//   switch (true) {
+//     case arr[midPoint] === target:
+//       return true
+//     case stop - start === 0:
+//       return false
+//     case arr[midPoint] < target:
+//       return binarySearch(arr, target, midPoint+1, stop)
+//     case arr[midPoint] > target:
+//       return binarySearch(arr, target, start, midPoint)
+//   // }
+//   // let mid = Math.floor(array.length / 2);
+//   // let start = 0;
+//   // let end = array.length - 1;
+
+//   // while (start <= mid && end >= mid) {
+//   //   if (array[mid] === target) {
+//   //     return mid;
+//   //   } else if (array[mid] > target) {
+//   //     start = mid + 1;
+//   //   } else if (array[mid] < target) {
+//   //     end = mid - 1;
+//   //   }
+//   //   mid = (start + end) / 2;
+//   // }
+//   // return -1;
+// };
+
+// const binarySearch = ( list, item, low, high, arrLength ) => {
+//     while ( low <= high ) {
+//         let mid = Math.floor((low + high) / 2);
+//         let guess = list[mid];
+//         if ( guess === item ) {
+//             return mid;
+//         } else if ( guess > item ) {
+//             high = mid - 1;
+//             list = list.slice( 0, mid );
+//             return binarySearch( list, item, low, high );
+//         } else {
+//             low = mid + 1;
+//             list = list.slice( low, arrLength );
+//             return binarySearch( list, item, low, high );
+//         }
+//     }
+//     return null;
+// };
 
 // 39. Write a merge sort function.
 // mergeSort([34,7,23,32,5,62]) // [5,7,23,32,34,62]
